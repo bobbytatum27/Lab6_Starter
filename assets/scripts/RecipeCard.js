@@ -133,7 +133,7 @@ class RecipeCard extends HTMLElement {
       let rounded_rating = Math.round(rating_value);
 
       // <img src="/assets/images/icons/5-star.svg" alt="5 stars">
-      let rating_img = '/assets/images/icons/' + rounded_rating + '-star.svg';
+      let rating_img = 'assets/images/icons/' + rounded_rating + '-star.svg';
       let alt_text = rounded_rating + ' stars';
       let span_elem = document.createElement('span');
       span_elem.textContent = String(rounded_rating);
