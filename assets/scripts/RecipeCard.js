@@ -1,8 +1,9 @@
 class RecipeCard extends HTMLElement {
   constructor() {
     // Part 1 Expose - TODO
-
+    super();
     // You'll want to attach the shadow DOM here
+    this.attachShadow({mode: 'open'});
   }
 
   set data(data) {
@@ -98,7 +99,68 @@ class RecipeCard extends HTMLElement {
 
     // Make sure to attach your root element and styles to the shadow DOM you
     // created in the constructor()
+    this.shadowRoot.appendChild(card);
+    this.shadowRoot.appendChild(styleElem);
 
+    let pic = document.createElement('img');
+    pic.src = searchForKey(data, 'thumbnailUrl');
+    pic.alt = 'Recipe Title';
+    card.appendChild(pic);
+
+    // link
+    let title = document.createElement('p');
+    title.classList.add('title');
+    let link = document.createElement('a');
+    link.href = getUrl(data);
+    link.textContent = searchForKey(data, 'headline');
+    title.appendChild(link);
+    card.appendChild(title);
+
+    // organization
+    let chef_org = document.createElement('p');
+    chef_org.classList.add('organization');
+    chef_org.textContent = getOrganization(data);
+    card.appendChild(chef_org);
+
+    // div class = 'rating'
+    let div_rating = document.createElement('div');
+    div_rating.classList.add('rating');
+    // determine if rating exists
+    let rating_exists = searchForKey(data, 'ratingValue');
+    if (rating_exists) {
+      let rating_value = parseFloat(searchForKey(data, 'ratingValue'));
+      let total_reviews = parseInt(searchForKey(data, 'ratingCount'));
+      let rounded_rating = Math.round(rating_value);
+
+      // <img src="/assets/images/icons/5-star.svg" alt="5 stars">
+      let rating_img = '/assets/images/icons/' + rounded_rating + '-star.svg';
+      let alt_text = rounded_rating + ' stars';
+      let span_elem = document.createElement('span');
+      span_elem.textContent = String(rounded_rating);
+      let rtg_img = document.createElement('img');
+      rtg_img.src = rating_img;
+      rtg_img.alt = alt_text;
+      let span_freq = document.createElement('span');
+      span_freq.textContent = '(' + total_reviews + ')';
+
+      div_rating.appendChild(span_elem);
+      div_rating.appendChild(rtg_img);
+      div_rating.appendChild(span_freq);
+    } else {
+      let span_elem = document.createElement('span');
+      span_elem.textContent = 'No Reviews';
+      div_rating.appendChild(span_elem);
+    }
+    card.appendChild(div_rating);
+
+    let time = document.createElement('time');
+    time.textContent = convertTime(searchForKey(data, 'totalTime'));
+    card.appendChild(time);
+
+    let ingredients_list = document.createElement('p');
+    ingredients_list.classList.add('ingredients');
+    ingredients_list.textContent = createIngredientList(searchForKey(data, 'recipeIngredient'));
+    card.appendChild(ingredients_list);
     // Part 1 Expose - TODO
   }
 }
