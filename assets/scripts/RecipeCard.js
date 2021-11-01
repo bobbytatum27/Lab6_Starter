@@ -139,6 +139,7 @@ class RecipeCard extends HTMLElement {
       span_elem.textContent = String(rounded_rating);
       let rtg_img = document.createElement('img');
       rtg_img.src = rating_img;
+      console.log(rtg_img.src);
       rtg_img.alt = alt_text;
       let span_freq = document.createElement('span');
       span_freq.textContent = '(' + total_reviews + ')';
